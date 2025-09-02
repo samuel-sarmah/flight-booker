@@ -134,9 +134,14 @@ airports.each do |departure_airport|
     arrival_airport = airports.where.not(id: departure_airport.id).sample
 
     # Generate random datetime between tomorrow and next month
-    start_range = Time.now + 1.day
-    end_range = Time.now + 1.month
-    random_time = Time.at(rand(start_range.to_i ..end_range.to_i))
+    base_date = Date.today + rand(1..30)
+
+    # Use specific hours and minutes
+    hour = [ 7, 10, 14, 17, 20 ].sample
+    minute = [ 0, 15, 30, 45 ].sample
+
+    # Combine date with time
+    random_time = base_date.to_time.change[hour: hour, min: minute]
 
     Flight.create!(
       departure_airport_id: departure_airport.id,
