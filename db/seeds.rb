@@ -141,12 +141,12 @@ airports.each do |departure_airport|
     minute = [ 0, 15, 30, 45 ].sample
 
     # Combine date with time
-    random_time = base_date.to_time.change[hour: hour, min: minute]
+    random_time = base_date.to_time.change(hour: hour, min: minute)
 
     Flight.create!(
       departure_airport_id: departure_airport.id,
       arrival_airport_id: arrival_airport.id,
-      start_datetime: random_time,
+      startdatetime: random_time,
       flight_duration: rand(60...720)
     )
     print "." # progress indicator
