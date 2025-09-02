@@ -116,3 +116,37 @@ airports = [
   [ "Entebbe International, UG", "EBB" ],
   [ "Auckland, NZ", "AKL" ]
 ]
+
+airports.each do |name, code|
+  Airport.create!(airport_name: name, airport_code: code)
+end
+puts "#{Airport.count} aiports created"
+
+puts "Creating flights..."
+# Generate random flights
+airports = Airport.all
+total_flights = 1500
+flights_per_airport = (total_flights / airports.count.to_f).ceil
+
+airports.each do |departure_airport|
+  flights_per_airport.times do
+    # Select a random airport that's different from departure
+    arrival_airport = airports.where.not(id: departure_airport.id).sample
+
+    # Generate random datetime between tomorrow and next month
+    start_range = Time.now + 1.day
+    end_range = Time.now + 1.month
+    random_time = Time.at(rand(start_range.to_i ..end_range.to_i))
+
+    Flight.create!(
+      departure_airport_id: departure_airport.id,
+      arrival_airport_id: arrival_airport.id,
+      start_datetime: random_time,
+      flight_duration: rand(60...720)
+    )
+    print "." # progress indicator
+  end
+end
+
+puts "#{Flight.count} flights created"
+puts "Average flights per airport: #{Flight.count.to_f / Airport.count}"
