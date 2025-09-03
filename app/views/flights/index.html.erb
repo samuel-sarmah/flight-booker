@@ -1,2 +1,29 @@
-<h1>Flights#index</h1>
-<p>Find me in app/views/flights/index.html.erb</p>
+<h1>Flight Booking</h1>
+
+<%= form_with url: flights_path, method: :get, local: true do |f| %>
+    <div>
+        <%= f.label :departure_airport_id, "From:" %>
+        <%= f.select :departure_airport_id, @airport_options, 
+        { include_blank: "Select departure airport"}%>
+    </div><br>
+
+    <div>
+        <%= f.label :arrival_airport_id, "To:" %>&emsp;
+        <%= f.select :arrival_airport_id, @airport_options, 
+        { include_blank: "Select arrival airport"}%>
+    </div><br>
+
+    <div>
+        <%= f.label :startdatetime, "Date" %>&ensp;
+        <%= f.select :startdatetime, @date_options,
+        { include_blank: "Select Date"}%>
+    </div> <br>
+
+    <div>
+        <%= f.label :passengers, "Passengers:" %>
+        <%= f.select :passengers, @passenger_options %>
+    </div><br>
+
+    <%= f.hidden_field :search, value: true %>
+    <%= f.submit "Search Flights"%>
+<% end %>
