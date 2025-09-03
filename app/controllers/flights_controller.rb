@@ -1,7 +1,6 @@
 class FlightsController < ApplicationController
   def index
     @airport_options = Airport.all.map { |airport| [ airport.airport_name, airport.airport_code ] }
-    @date_options = Flight.select(:startdatetime).map { |f| f.startdatetime.to_date }.uniq.sort
     @passenger_options = (1..4)
 
     @flights = Flight.all

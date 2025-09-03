@@ -4,7 +4,7 @@
     <div>
         <%= f.label :departure_airport_id, "From:" %>
         <%= f.select :departure_airport_id, @airport_options, 
-        { include_blank: "Select departure airport"}%>
+        { include_blank: "Select departure airport"} %>
     </div><br>
 
     <div>
@@ -15,8 +15,7 @@
 
     <div>
         <%= f.label :startdatetime, "Date" %>&ensp;
-        <%= f.select :startdatetime, @date_options,
-        { include_blank: "Select Date"}%>
+        <%= f.date_field :startdatetime, min: Date.today, max: Date.today + 365.days %>
     </div> <br>
 
     <div>
