@@ -1,2 +1,30 @@
-<h1>Bookings#new</h1>
-<p>Find me in app/views/bookings/new.html.erb</p>
+<h1>Book Flight</h1>
+<p>
+    <strong>Flight Date: </strong><%= @flight.startdatetime.strftime("%b %d, %Y at %H:%M") %><br>
+    <strong>From: </strong><%= @flight.departure_airport.airport_code %>
+    <strong>To: </strong><%= @flight.arrival_airport.airport_code %>
+</p>
+
+<%= form_with model: @booking, url: bookings_path do |f| %>
+    <%= f.hidden_field :flight_id, value: @flight.id %>
+    <%= f.hidden_field :passenger_count, value: @passenger_count %>
+
+    <h3>Passenger Information</h3>
+    <% @booking.passengers.each_with_index do |passenger, i| %>
+        <fieldset>
+            <legend>Passenger <%= i + 1%></legend>
+            <%= f.fields_for :passenger, passenger do |pf| %>
+                <div>
+                    <%= pf.label :name, "Full Name" %>
+                    <%= pf.text_field :name %>
+                </div>
+                <div>
+                    <%= pf.label :email, "Email" %>
+                    <%= pf.text_field :email %>
+                </div>
+            <% end %>
+        </fieldset>
+    <% end %>
+
+    <%= f.submit "Confirm Booking" %>
+<% end %>
