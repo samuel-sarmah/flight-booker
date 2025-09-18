@@ -1,14 +1,20 @@
 <h1>Booking Confirmation</h1>
 <p>
-    Flight: <%= @booking.flight.departure_airport.airport_code %> ---> <%= @booking.flight.arrival_airport.airport_code %>
-    Date: <%= @booking.flight.startdatetime.strftime("%b %d, %Y at %H:%M") %>
+    <strong>Flight:</strong>
+    <%= @booking.flight.departure_airport.airport_code %> &rarr; <%= @booking.flight.arrival_airport.airport_code %>
+    <strong>Date:</strong>
+    <%= @booking.flight.startdatetime.strftime("%b %d, %Y at %H:%M") %>
 </p>
 
 <h3>Passengers</h3>
-<ol>
+
     <% @booking.passengers.each do |passenger| %>
-        <li>
-            Name: <%= passenger.name %> Email: <%= passenger.email %>
-        </li>
+        <ol>
+            <ul>
+                <li><strong>Name: </strong> <%= passenger.name %></li>
+                <li><strong>Email: </strong> <%= passenger.email %></li>
+            </ul>
+
+        </ol>
     <% end %>
-</ol>
+
