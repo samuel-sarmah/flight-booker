@@ -1,5 +1,12 @@
 <h1>Flight Booking</h1>
 
+<style>
+    .flights-table th, .flights-table td {
+        padding: 0 15px;
+        text-align: center;
+    }
+</style> 
+
 <%= form_with url: flights_path, method: :get, local: true do |f| %>
     <div>
         <%= f.label :departure_airport_id, "From:" %>
@@ -28,7 +35,7 @@
 
 <% if @flights.any? %>
     <h2>Available Flights</h2>
-    <table>
+    <table class="flights-table">
         <thead>
             <tr>
                 <th>From</th>
