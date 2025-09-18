@@ -13,14 +13,14 @@
     <% @booking.passengers.each_with_index do |passenger, i| %>
         <fieldset>
             <legend>Passenger <%= i + 1%></legend>
-            <%= f.fields_for :passenger, passenger do |pf| %>
+            <%= f.fields_for :passengers, passenger do |pf| %>
                 <div>
                     <%= pf.label :name, "Full Name" %>
                     <%= pf.text_field :name %>
                 </div>
                 <div>
                     <%= pf.label :email, "Email" %>
-                    <%= pf.text_field :email %>
+                    <%= pf.email_field :email %>
                 </div>
             <% end %>
         </fieldset>
