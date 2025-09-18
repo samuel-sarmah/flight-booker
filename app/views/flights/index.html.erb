@@ -35,28 +35,32 @@
 
 <% if @flights.any? %>
     <h2>Available Flights</h2>
-    <table class="flights-table">
-        <thead>
-            <tr>
-                <th>From</th>
-                <th>To</th>
-                <th>Date & Time</th>
-                <th>Duration</th>
-                <th>Select</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% @flights.each do |flight| %>
+    <%= form_with url: new_booking_path, method: :get, local: true do %>
+        <table class="flights-table">
+            <thead>
                 <tr>
-                    <td><%= flight.departure_airport.airport_code %></td>
-                    <td><%= flight.arrival_airport.airport_code %></td>
-                    <td><%= flight.startdatetime.strftime("%b %d, %Y at %H:%M")%></td>
-                    <td><%= flight.flight_duration %>mins</td>
-                    <td><%= radio_button_tag :flight_id, flight.id %></td>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Date & Time</th>
+                    <th>Duration</th>
+                    <th>Select</th>
                 </tr>
-            <% end %>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <% @flights.each do |flight| %>
+                    <tr>
+                        <td><%= flight.departure_airport.airport_code %></td>
+                        <td><%= flight.arrival_airport.airport_code %></td>
+                        <td><%= flight.startdatetime.strftime("%b %d, %Y at %H:%M")%></td>
+                        <td><%= flight.flight_duration %>mins</td>
+                        <td><%= radio_button_tag :flight_id, flight.id %></td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+        <%= hidden_field_tag :passengers, params[:passengers] %> <br>
+        <%= submit_tag "Book Selected Flight" %>
+    <% end %>
 <% elsif params[:departure_airport_id].present? || params[:arrival_airport_id].present? || params[:startdatetime].present? %>
     <p>No flights found matching your criteria.</p>
 <%end%>
