@@ -6,25 +6,26 @@
 </p>
 
 
-<%= form_with model: @booking, url: bookings_path, data: { controller: "add-passenger"} do |f| %>
+<%= form_with model: @booking, url: bookings_path, data: { controller: "add-passenger remove-passenger"} do |f| %>
     <%= f.hidden_field :flight_id, value: @flight.id %>
     <%= f.hidden_field :passenger_count, value: @passenger_count %>
 
     <h3>Passenger Information</h3>
-    <div data-add-passenger-target="container">
+    <div data-add-passenger-target="container" data-remove-passenger-target="container">
         <% @booking.passengers.each_with_index do |passenger, i| %>
             <fieldset>
                 <legend>Passenger <%= i + 1%></legend>
                 <%= f.fields_for :passengers, passenger do |pf| %>
                     <div>
-                        <%= pf.label :name, "Full Name" %>
+                        <%= pf.label :name, "Full Name:" %>
                         <%= pf.text_field :name %>
-                    </div>
+                    </div><br>
                     <div>
-                        <%= pf.label :email, "Email" %>
+                        <%= pf.label :email, "Email:" %>&ensp; &ensp;
                         <%= pf.email_field :email %>
                     </div>
-                <% end %>
+                <% end %> <br>
+                <button type="button" data-action="click->remove-passenger#remove">Remove Passenger</button>
             </fieldset>
         <% end %>
     </div>
@@ -33,15 +34,16 @@
         <fieldset>
             <legend>Passenger</legend>
             <div>
-                <label for="booking_passengers_attributes_0_name">Full Name</label>
+                <label for="booking_passengers_attributes_0_name">Full Name:</label>
                 <input type="text" name="booking[passengers_attributes][0][name]" id="booking_passengers_attributes_0_name">
-            </div>
+            </div><br>
             <div>
-                <label for="booking_passengers_attributes_0_email">Email</label>
+                <label for="booking_passengers_attributes_0_email">Email: &ensp; &ensp;</label>
                 <input type="text" name="booking[passengers_attributes][0][email]" id="booking_passengers_attributes_0_email">
-            </div>
+            </div><br>
+            <button type="button" data-action="click->remove-passenger#remove">Remove Passenger</button>
         </fieldset>
-    </template>
+    </template><br>
 
     <button type="button" data-action="click->add-passenger#add">Add Passenger</button> <br><br>
     <%= f.submit "Confirm Booking" %><br><br>
