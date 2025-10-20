@@ -5,44 +5,46 @@
     <strong>To: </strong><%= @flight.arrival_airport.airport_code %>
 </p>
 
-<%= form_with model: @booking, url: bookings_path, data-contoller="add-passenger" do |f| %>
+
+<%= form_with model: @booking, url: bookings_path, data: { controller: "add-passenger"} do |f| %>
     <%= f.hidden_field :flight_id, value: @flight.id %>
     <%= f.hidden_field :passenger_count, value: @passenger_count %>
 
     <h3>Passenger Information</h3>
-    <% @booking.passengers.each_with_index do |passenger, i| %>
-        <fieldset>
-            <legend>Passenger <%= i + 1%></legend>
-            <%= f.fields_for :passengers, passenger do |pf| %>
-                <div>
-                    <%= pf.label :name, "Full Name" %>
-                    <%= pf.text_field :name %>
-                </div>
-                <div>
-                    <%= pf.label :email, "Email" %>
-                    <%= pf.email_field :email %>
-                </div>
-            <% end %>
-        </fieldset>
-    <% end %><br>
-
-    <%= f.submit "Confirm Booking" %><br><br>
-    <div>
-        <button>Add Passenger</button>
-        <template>
+    <div data-add-passenger-target="container">
+        <% @booking.passengers.each_with_index do |passenger, i| %>
             <fieldset>
-                <legend>Additional passenger(s)</legend>
+                <legend>Passenger <%= i + 1%></legend>
                 <%= f.fields_for :passengers, passenger do |pf| %>
                     <div>
-
+                        <%= pf.label :name, "Full Name" %>
+                        <%= pf.text_field :name %>
                     </div>
                     <div>
-
+                        <%= pf.label :email, "Email" %>
+                        <%= pf.email_field :email %>
                     </div>
                 <% end %>
             </fieldset>
-        </template>
+        <% end %>
     </div>
-    <br>
+
+    <template data-add-passenger-target="template">
+        <fieldset>
+            <legend>Passenger</legend>
+            <div>
+                <label for="booking_passengers_attributes_0_name">Full Name</label>
+                <input type="text" name="booking[passengers_attributes][0][name]" id="booking_passengers_attributes_0_name">
+            </div>
+            <div>
+                <label for="booking_passengers_attributes_0_email">Email</label>
+                <input type="text" name="booking[passengers_attributes][0][email]" id="booking_passengers_attributes_0_email">
+            </div>
+        </fieldset>
+    </template>
+
+    <button type="button" data-action="click->add-passenger#add">Add Passenger</button> <br><br>
+    <%= f.submit "Confirm Booking" %><br><br>
+    
     <button><%= link_to "Back", flights_path, class: "btn btn-secondary" %></button>
 <% end %>
