@@ -14,13 +14,12 @@
 <h3>Passengers</h3>
 
 <% @booking.passengers.each do |passenger| %>
-    <ol>
+    <div>
         <ul>
             <li><strong>Name: </strong> <%= passenger.name %></li>
             <li><strong>Email: </strong> <%= passenger.email %></li>
         </ul>
-
-    </ol>
+    </div>
 <% end %>
 
 <button><%= link_to "Back", request.referer || flights_path, class: "btn btn-secondary" %></button>
