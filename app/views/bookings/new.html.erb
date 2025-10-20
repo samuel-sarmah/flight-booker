@@ -5,7 +5,7 @@
     <strong>To: </strong><%= @flight.arrival_airport.airport_code %>
 </p>
 
-<%= form_with model: @booking, url: bookings_path do |f| %>
+<%= form_with model: @booking, url: bookings_path, data-contoller="add-passenger" do |f| %>
     <%= f.hidden_field :flight_id, value: @flight.id %>
     <%= f.hidden_field :passenger_count, value: @passenger_count %>
 
@@ -24,8 +24,25 @@
                 </div>
             <% end %>
         </fieldset>
-    <% end %>
+    <% end %><br>
 
-    <%= f.submit "Confirm Booking" %>
+    <%= f.submit "Confirm Booking" %><br><br>
+    <div>
+        <button>Add Passenger</button>
+        <template>
+            <fieldset>
+                <legend>Additional passenger(s)</legend>
+                <%= f.fields_for :passengers, passenger do |pf| %>
+                    <div>
+
+                    </div>
+                    <div>
+
+                    </div>
+                <% end %>
+            </fieldset>
+        </template>
+    </div>
+    <br>
     <button><%= link_to "Back", flights_path, class: "btn btn-secondary" %></button>
 <% end %>
