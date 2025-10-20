@@ -9,3 +9,6 @@ application.register("add-passenger", AddPassengerController)
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+import RemovePassengerController from "./remove_passenger_controller"
+application.register("remove-passenger", RemovePassengerController)
