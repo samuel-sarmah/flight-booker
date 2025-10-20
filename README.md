@@ -76,7 +76,7 @@ A full-featured flight booking application built with Ruby on Rails that demonst
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:samuel-sarmah/flight-booker.git
    cd flight-booker
    ```
 
