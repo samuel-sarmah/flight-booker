@@ -1,2 +1,15 @@
-<h1>Passengers#show</h1>
-<p>Find me in app/views/passengers/show.html.erb</p>
+<h1>Your Ticket</h1>
+<p><strong>Ticket Number:</strong><%= @passenger.ticket_number %></p>
+
+<h3>Passenger Information</h3>
+<p><strong></strong><%= @passenger.name %> </p>
+<p><strong></strong><%= @passenger.email %> </p>
+
+
+<h3>Flight Details</h3>
+<p><strong>From:</strong><%= @flight.departure_airport.airport_code %> </p>
+<p><strong>To:</strong><%= @flight.arrival_airport.airport_code %> </p>
+<p><strong>Departure:</strong><%= @flight.startdatetime %> </p>
+<p><strong>Duration:</strong><%= @flight.duration %>minutes </p>
+
+<%= link_to "Back", :back, class"btn btn-secondary" %>

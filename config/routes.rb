@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "flights#index"
   resources :flights, only: [ :index ]
-  resources :bookings, only: [ :new, :create, :show ]
+  resources :bookings, only: [ :new, :create, :show ] do
+    resources :passenges, only: [ :show ]
+  end
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
