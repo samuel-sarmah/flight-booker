@@ -4,11 +4,18 @@
 
 import { application } from "./application"
 
-import AddPassengerController from "./add_passenger_controller"
-application.register("add-passenger", AddPassengerController)
+import FlightSearchController from "./flight_search_controller"
+application.register("flight-search", FlightSearchController)
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
+import FlightSelectController from "./flight_select_controller"
+application.register("flight-select", FlightSelectController)
 
-import RemovePassengerController from "./remove_passenger_controller"
-application.register("remove-passenger", RemovePassengerController)
+import PassengersController from "./passengers_controller"
+application.register("passengers", PassengersController)
+
+import PassengerFormController from "./passenger_form_controller"
+application.register("passenger-form", PassengerFormController)
+
+import FormValidationController from "./form_validation_controller"
+application.register("form-validation", FormValidationController)
+
