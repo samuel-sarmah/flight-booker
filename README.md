@@ -1,183 +1,133 @@
-# Flight Booker
+# ✈️ Flight Booker
 
-A full-featured flight booking application built with Ruby on Rails that demonstrates advanced form handling, nested attributes, email notifications, and multi-step booking flows.
+A beautiful, Apple-inspired flight booking app built with Ruby on Rails and Hotwire (Turbo + Stimulus). Book your flight in 3 easy steps!
 
-## Features
+![Ruby](https://img.shields.io/badge/Ruby-3.4.2-red)
+![Rails](https://img.shields.io/badge/Rails-8.0-red)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
-### 1. Flight Search
-- Search flights by departure airport, arrival airport, and date
-- Select number of passengers (1-4)
-- Real-time filtering of available flights
-- Display flight details including:
-  - Departure and arrival airports
-  - Flight date and time
-  - Flight duration
+## 🎯 How It Works
 
-### 2. Flight Selection
-- Browse search results in an organized table
-- Select desired flight via radio button
-- View comprehensive flight information before booking
+Booking a flight is super easy - just 3 steps:
 
-### 3. Passenger Information
-- Dynamic passenger form generation based on selected passenger count
-- Add or remove passengers dynamically using Stimulus controllers
-- Collect passenger details:
-  - Full name
-  - Email address
-- Automatic ticket number generation for each passenger
+### Step 1: Search Flights
+- Pick where you're flying **from** and **to**
+- Choose your travel date
+- Select how many passengers (1-9 people)
+- Click "Search Flights"
 
-### 4. Booking Confirmation
-- Confirmation page displaying:
-  - Flight details
-  - All passenger information
-  - Individual ticket numbers
-- Email notifications sent to each passenger with:
-  - Unique ticket number
-  - Flight details
-  - Direct link to view individual ticket
+### Step 2: Choose Your Flight
+- Browse the available flights
+- See departure/arrival times, duration, and price
+- Click on a flight card to select it
+- Click "Continue to Passengers"
 
-### 5. Email System
-- Individual confirmation emails for each passenger
-- HTML and text email versions
-- Development email preview via `letter_opener_web`
-- Accessible at `/letter_opener` in development mode
+### Step 3: Enter Passenger Details
+- Fill in names and emails for each passenger
+- Add more passengers with the "Add Passenger" button
+- Click "Confirm Booking"
+- 🎉 Done! Everyone gets a confirmation email!
 
-## Technical Stack
+## ✨ Features
 
-- **Ruby on Rails 8.0**
-- **Ruby 3.4.2**
-- **SQLite3** (development/test)
-- **Stimulus** for JavaScript interactions
-- **Action Mailer** for email notifications
-- **letter_opener_web** for email preview in development
+- **Beautiful Design** - Clean, Apple-inspired interface
+- **Real-time Validation** - See errors as you type
+- **Dynamic Forms** - Add/remove passengers instantly
+- **Email Confirmations** - Each passenger gets their ticket
+- **Mobile Friendly** - Works great on phones and tablets
+- **Fast & Smooth** - Hotwire makes everything snappy
 
-## Database Schema
+## 🚀 Getting Started
 
-### Airports
-- `airport_name`: string
-- `airport_code`: string (3-letter IATA code)
+### Prerequisites
+- Ruby 3.4.2
+- Rails 8.0
+- SQLite3
 
-### Flights
-- `departure_airport_id`: references airports
-- `arrival_airport_id`: references airports
-- `startdatetime`: datetime
-- `flight_duration`: integer (minutes)
+### Setup
 
-### Bookings
-- `flight_id`: references flights
-
-### Passengers
-- `booking_id`: references bookings
-- `name`: string
-- `email`: string
-- `ticket_number`: string (unique, auto-generated)
-
-## Setup Instructions
-
-1. **Clone the repository:**
-   ```bash
-   git clone git@github.com:samuel-sarmah/flight-booker.git
+1. **Clone the repo**
+   \`\`\`bash
+   git clone https://github.com/yourusername/flight-booker.git
    cd flight-booker
-   ```
+   \`\`\`
 
-2. **Install dependencies:**
-   ```bash
+2. **Install dependencies**
+   \`\`\`bash
    bundle install
-   ```
+   \`\`\`
 
-3. **Setup database:**
-   ```bash
-   rails db:create
-   rails db:migrate
-   rails db:seed
-   ```
+3. **Set up the database**
+   \`\`\`bash
+   bin/rails db:create db:migrate db:seed
+   \`\`\`
 
-4. **Start the server:**
-   ```bash
-   rails server
-   ```
+4. **Start the server**
+   \`\`\`bash
+   bin/rails server
+   \`\`\`
 
-5. **Visit the application:**
-   ```
-   http://localhost:3000
-   ```
+5. **Open your browser**
+   Go to [http://localhost:3000](http://localhost:3000)
 
-6. **View sent emails (development only):**
-   ```
-   http://localhost:3000/letter_opener
-   ```
+### View Emails (Development)
+In development, emails don't actually send - they open in your browser!
+Visit [http://localhost:3000/letter_opener](http://localhost:3000/letter_opener) to see all sent emails.
 
-## Seed Data
+## 📁 Project Structure
 
-The application includes seed data with:
-- 100+ airports from around the world
-- 1,500+ flights evenly distributed across airports
-- Flight dates ranging from tomorrow to 365 days in the future
-- Realistic flight durations (60-720 minutes)
+\`\`\`
+app/
+├── assets/stylesheets/     # Apple-inspired CSS design system
+├── controllers/            # Rails controllers
+├── javascript/controllers/ # Stimulus controllers for interactivity
+├── models/                 # Flight, Booking, Passenger, Airport
+├── views/                  # ERB templates with Turbo
+└── mailers/                # Passenger confirmation emails
 
-## Key Features Implementation
+db/
+├── seeds.rb               # 70 airports, 90 days of flights
+└── migrate/               # Database migrations
+\`\`\`
 
-### Dynamic Passenger Management
-Uses Stimulus controllers to:
-- Add new passenger fields dynamically
-- Remove passenger fields
-- Automatically reindex form fields for proper Rails nested attributes submission
+## 🔧 Tech Stack
 
-### Email Notifications
-- Multipart emails (HTML + text)
-- Personalized for each passenger
-- Includes unique ticket number
-- Direct link to view individual ticket details
+| Technology | Purpose |
+|------------|---------|
+| Ruby on Rails 8 | Backend framework |
+| Hotwire (Turbo + Stimulus) | Modern frontend without heavy JavaScript |
+| SQLite3 | Database |
+| Letter Opener | Email preview in development |
 
-### Form Handling
-- Multi-step booking process
-- GET requests for search (bookmarkable URLs)
-- POST requests for booking creation
-- Nested attributes for passengers
-- Strong parameters for security
+## 🧪 Running Tests
 
-## Future Enhancements
+\`\`\`bash
+bin/rails test
+\`\`\`
 
-Potential additions for a complete booking system:
+## 📝 Validation Rules
 
-- **Payment Integration:**
-  - PayPal API via [paypal-express gem](https://github.com/nov/paypal-express)
-  - Stripe Checkout integration
-  - Credit card payment processing
+**Passengers must have:**
+- Name: 2+ characters, letters/spaces/hyphens only
+- Email: Valid email format
 
-- **Additional Features:**
-  - User authentication and accounts
-  - Booking history
-  - Flight cancellations and modifications
-  - Round-trip flights
-  - Seat selection
-  - PDF ticket generation
-  - SMS notifications
-  - Multi-language support
+**Bookings must have:**
+- At least 1 passenger
+- A valid flight selected
 
-## Testing
+## 🎨 Design Philosophy
 
-```bash
-# Run all tests
-rails test
+The app follows Apple's Human Interface Guidelines:
+- Clean, minimalist design
+- Subtle shadows and rounded corners
+- Smooth animations and transitions
+- Clear visual hierarchy
+- Mobile-first responsive layout
 
-# Run specific test file
-rails test test/models/passenger_test.rb
-```
+## 📄 License
 
-## Contributing
+MIT License - see [LICENSE](LICENSE) for details.
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+---
 
-## License
-
-This project is available as open source under the terms of the MIT License.
-
-## Acknowledgments
-
-- Part of [The Odin Project](https://www.theodinproject.com/) curriculum
-- Built to practice advanced Rails forms and associations
+Made with ❤️ using Ruby on Rails
