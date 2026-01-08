@@ -1,52 +1,198 @@
-<h1>Book Flight</h1>
-<p>
-    <strong>Flight Date: </strong><%= @flight.startdatetime.strftime("%b %d, %Y at %H:%M") %><br>
-    <strong>From: </strong><%= @flight.departure_airport.airport_code %>
-    <strong>To: </strong><%= @flight.arrival_airport.airport_code %>
-</p>
+<% content_for :title, "Passenger Details" %>
 
+<!-- Progress Steps -->
+<nav class="progress-steps" aria-label="Booking progress">
+  <div class="progress-step progress-step--completed">
+    <span class="progress-step__number">✓</span>
+    <span class="progress-step__label">Search</span>
+  </div>
+  <div class="progress-step__divider progress-step__divider--completed"></div>
+  <div class="progress-step progress-step--active">
+    <span class="progress-step__number">2</span>
+    <span class="progress-step__label">Passengers</span>
+  </div>
+  <div class="progress-step__divider"></div>
+  <div class="progress-step">
+    <span class="progress-step__number">3</span>
+    <span class="progress-step__label">Confirm</span>
+  </div>
+</nav>
 
-<%= form_with model: @booking, url: bookings_path, data: { controller: "add-passenger remove-passenger"} do |f| %>
+<!-- Flight Summary Card -->
+<div class="card mb-xl" style="max-width: 600px; margin-left: auto; margin-right: auto;">
+  <div class="card__header">
+    <h3 class="card__title" style="margin-bottom: 0;">Selected Flight</h3>
+  </div>
+  <div class="summary-flight" style="margin-bottom: 0;">
+    <div class="summary-flight__endpoint">
+      <div class="summary-flight__code"><%= @flight.departure_airport.airport_code %></div>
+      <div class="summary-flight__city"><%= @flight.departure_airport.airport_name.split(',').first %></div>
+    </div>
+    <div class="summary-flight__arrow">→</div>
+    <div class="summary-flight__endpoint">
+      <div class="summary-flight__code"><%= @flight.arrival_airport.airport_code %></div>
+      <div class="summary-flight__city"><%= @flight.arrival_airport.airport_name.split(',').first %></div>
+    </div>
+  </div>
+  <div class="summary-details" style="margin-top: var(--space-md); margin-bottom: 0;">
+    <div class="summary-detail">
+      <div class="summary-detail__label">Date</div>
+      <div class="summary-detail__value"><%= @flight.startdatetime.strftime("%B %d, %Y") %></div>
+    </div>
+    <div class="summary-detail">
+      <div class="summary-detail__label">Departure</div>
+      <div class="summary-detail__value"><%= @flight.startdatetime.strftime("%H:%M") %></div>
+    </div>
+    <div class="summary-detail">
+      <div class="summary-detail__label">Duration</div>
+      <div class="summary-detail__value"><%= @flight.flight_duration %> minutes</div>
+    </div>
+    <div class="summary-detail">
+      <div class="summary-detail__label">Passengers</div>
+      <div class="summary-detail__value"><%= pluralize(@passenger_count, "passenger") %></div>
+    </div>
+  </div>
+</div>
+
+<!-- Passenger Form -->
+<section class="passenger-section">
+  <h2 class="text-center mb-xl">Passenger Information</h2>
+
+  <%= form_with model: @booking, url: bookings_path, 
+                data: { controller: "passengers form-validation" } do |f| %>
+    
     <%= f.hidden_field :flight_id, value: @flight.id %>
-    <%= f.hidden_field :passenger_count, value: @passenger_count %>
 
-    <h3>Passenger Information</h3>
-    <div data-add-passenger-target="container" data-remove-passenger-target="container">
-        <% @booking.passengers.each_with_index do |passenger, i| %>
-            <fieldset>
-                <legend>Passenger <%= i + 1%></legend>
-                <%= f.fields_for :passengers, passenger do |pf| %>
-                    <div>
-                        <%= pf.label :name, "Full Name:" %>
-                        <%= pf.text_field :name %>
-                    </div><br>
-                    <div>
-                        <%= pf.label :email, "Email:" %>&ensp; &ensp;
-                        <%= pf.email_field :email %>
-                    </div>
-                <% end %> <br>
-                <button type="button" data-action="click->remove-passenger#remove">Remove Passenger</button>
-            </fieldset>
-        <% end %>
+    <div class="passenger-list" data-passengers-target="container">
+      <% @booking.passengers.each_with_index do |passenger, i| %>
+        <div class="passenger-card">
+          <div class="passenger-card__header">
+            <h4 class="passenger-card__title">Passenger <%= i + 1 %></h4>
+            <% if i == 0 %>
+              <span class="passenger-card__badge">Primary Contact</span>
+            <% end %>
+          </div>
+          
+          <%= f.fields_for :passengers, passenger, index: i do |pf| %>
+            <div class="passenger-card__fields">
+              <div class="form-group">
+                <%= pf.label :name, "Full Name", class: "form-label form-label--required" %>
+                <%= pf.text_field :name, 
+                    class: "form-input", 
+                    placeholder: "Enter full name",
+                    required: true,
+                    autocomplete: "name",
+                    data: { 
+                      passengers_target: "name",
+                      validation_type: "name",
+                      validation_required: true,
+                      action: "blur->form-validation#validateField input->form-validation#validateField"
+                    } %>
+              </div>
+              
+              <div class="form-group">
+                <%= pf.label :email, "Email Address", class: "form-label form-label--required" %>
+                <%= pf.email_field :email, 
+                    class: "form-input", 
+                    placeholder: "email@example.com",
+                    required: true,
+                    autocomplete: "email",
+                    data: { 
+                      passengers_target: "email",
+                      validation_type: "email",
+                      validation_required: true,
+                      action: "blur->form-validation#validateField input->form-validation#validateField"
+                    } %>
+              </div>
+            </div>
+          <% end %>
+
+          <% if i > 0 %>
+            <div class="passenger-card__actions">
+              <button type="button" class="btn btn-ghost btn-sm" 
+                      data-action="click->passengers#remove">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                </svg>
+                Remove
+              </button>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
     </div>
 
-    <template data-add-passenger-target="template">
-        <fieldset>
-            <legend>Passenger</legend>
-            <div>
-                <label for="booking_passengers_attributes_0_name">Full Name:</label>
-                <input type="text" name="booking[passengers_attributes][0][name]" id="booking_passengers_attributes_0_name">
-            </div><br>
-            <div>
-                <label for="booking_passengers_attributes_0_email">Email: &ensp; &ensp;</label>
-                <input type="text" name="booking[passengers_attributes][0][email]" id="booking_passengers_attributes_0_email">
-            </div><br>
-            <button type="button" data-action="click->remove-passenger#remove">Remove Passenger</button>
-        </fieldset>
-    </template><br>
+    <!-- Add Passenger Template -->
+    <template data-passengers-target="template">
+      <div class="passenger-card">
+        <div class="passenger-card__header">
+          <h4 class="passenger-card__title">Passenger</h4>
+        </div>
+        
+        <div class="passenger-card__fields">
+          <div class="form-group">
+            <label for="booking_passengers_attributes_0_name" class="form-label form-label--required">Full Name</label>
+            <input type="text" 
+                   name="booking[passengers_attributes][0][name]" 
+                   id="booking_passengers_attributes_0_name"
+                   class="form-input" 
+                   placeholder="Enter full name"
+                   required
+                   autocomplete="name"
+                   data-passengers-target="name"
+                   data-validation-type="name"
+                   data-validation-required="true"
+                   data-action="blur->form-validation#validateField input->form-validation#validateField">
+          </div>
+          
+          <div class="form-group">
+            <label for="booking_passengers_attributes_0_email" class="form-label form-label--required">Email Address</label>
+            <input type="email" 
+                   name="booking[passengers_attributes][0][email]" 
+                   id="booking_passengers_attributes_0_email"
+                   class="form-input" 
+                   placeholder="email@example.com"
+                   required
+                   autocomplete="email"
+                   data-passengers-target="email"
+                   data-validation-type="email"
+                   data-validation-required="true"
+                   data-action="blur->form-validation#validateField input->form-validation#validateField">
+          </div>
+        </div>
 
-    <button type="button" data-action="click->add-passenger#add">Add Passenger</button> <br><br>
-    <%= f.submit "Confirm Booking" %><br><br>
-    
-    <button><%= link_to "Back", flights_path, class: "btn btn-secondary" %></button>
-<% end %>
+        <div class="passenger-card__actions">
+          <button type="button" class="btn btn-ghost btn-sm" 
+                  data-action="click->passengers#remove">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+            </svg>
+            Remove
+          </button>
+        </div>
+      </div>
+    </template>
+
+    <!-- Actions -->
+    <div class="flex gap-md mt-xl" style="justify-content: space-between;">
+      <button type="button" class="btn btn-secondary" 
+              data-action="click->passengers#add"
+              data-passengers-target="addBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        Add Passenger
+      </button>
+      
+      <div class="flex gap-md">
+        <%= link_to "Back", flights_path, class: "btn btn-ghost" %>
+        
+        <%= f.submit "Confirm Booking", 
+            class: "btn btn-primary btn-lg",
+            data: { form_validation_target: "submit" } %>
+      </div>
+    </div>
+  <% end %>
+</section>

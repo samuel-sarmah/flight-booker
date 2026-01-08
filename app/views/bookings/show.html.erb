@@ -1,25 +1,141 @@
-<h1>Booking Confirmation</h1>
-<style>
-    .btn {
-        text-decoration: none;
-    }
-</style>
-<p>
-    <strong>Flight:</strong>
-    <%= @booking.flight.departure_airport.airport_code %> &rarr; <%= @booking.flight.arrival_airport.airport_code %>
-    <strong>Date:</strong>
-    <%= @booking.flight.startdatetime.strftime("%b %d, %Y at %H:%M") %>
-</p>
+<% content_for :title, "Booking Confirmed" %>
 
-<h3>Passengers</h3>
+<!-- Progress Steps -->
+<nav class="progress-steps" aria-label="Booking progress">
+  <div class="progress-step progress-step--completed">
+    <span class="progress-step__number">✓</span>
+    <span class="progress-step__label">Search</span>
+  </div>
+  <div class="progress-step__divider progress-step__divider--completed"></div>
+  <div class="progress-step progress-step--completed">
+    <span class="progress-step__number">✓</span>
+    <span class="progress-step__label">Passengers</span>
+  </div>
+  <div class="progress-step__divider progress-step__divider--completed"></div>
+  <div class="progress-step progress-step--completed">
+    <span class="progress-step__number">✓</span>
+    <span class="progress-step__label">Confirm</span>
+  </div>
+</nav>
 
-<% @booking.passengers.each do |passenger| %>
-    <div>
-        <ul>
-            <li><strong>Name: </strong> <%= passenger.name %></li>
-            <li><strong>Email: </strong> <%= passenger.email %></li>
-        </ul>
+<!-- Success Confirmation -->
+<section class="confirmation">
+  <div class="confirmation__icon">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+  </div>
+  
+  <h1 class="confirmation__title">Booking Confirmed!</h1>
+  <p class="confirmation__message">
+    Your flight has been booked successfully. Confirmation emails have been sent to all passengers.
+  </p>
+  
+  <div class="confirmation__reference">
+    BOOKING #<%= @booking.id.to_s.rjust(6, '0') %>
+  </div>
+</section>
+
+<!-- Booking Details Card -->
+<div class="summary-section mt-2xl">
+  <div class="summary-card">
+    <div class="summary-card__header">
+      <div class="summary-card__icon">✈️</div>
+      <h2 class="summary-card__title">Flight Details</h2>
+      <p class="summary-card__subtitle">
+        <%= @booking.flight.startdatetime.strftime("%A, %B %d, %Y") %>
+      </p>
     </div>
-<% end %>
 
-<button><%= link_to "Back", request.referer || flights_path, class: "btn btn-secondary" %></button>
+    <div class="summary-card__body">
+      <!-- Flight Route -->
+      <div class="summary-flight">
+        <div class="summary-flight__endpoint">
+          <div class="summary-flight__code"><%= @booking.flight.departure_airport.airport_code %></div>
+          <div class="summary-flight__city"><%= @booking.flight.departure_airport.airport_name.split(',').first %></div>
+          <div class="text-muted" style="font-size: var(--font-size-lg); margin-top: var(--space-xs);">
+            <%= @booking.flight.startdatetime.strftime("%H:%M") %>
+          </div>
+        </div>
+        
+        <div class="summary-flight__arrow">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+        
+        <div class="summary-flight__endpoint">
+          <div class="summary-flight__code"><%= @booking.flight.arrival_airport.airport_code %></div>
+          <div class="summary-flight__city"><%= @booking.flight.arrival_airport.airport_name.split(',').first %></div>
+          <div class="text-muted" style="font-size: var(--font-size-lg); margin-top: var(--space-xs);">
+            <%= (@booking.flight.startdatetime + @booking.flight.flight_duration.minutes).strftime("%H:%M") %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flight Info -->
+      <div class="summary-details">
+        <div class="summary-detail">
+          <div class="summary-detail__label">Duration</div>
+          <div class="summary-detail__value"><%= @booking.flight.flight_duration %> minutes</div>
+        </div>
+        <div class="summary-detail">
+          <div class="summary-detail__label">Flight Type</div>
+          <div class="summary-detail__value">Direct</div>
+        </div>
+        <div class="summary-detail">
+          <div class="summary-detail__label">Booked On</div>
+          <div class="summary-detail__value"><%= @booking.created_at.strftime("%b %d, %Y") %></div>
+        </div>
+        <div class="summary-detail">
+          <div class="summary-detail__label">Passengers</div>
+          <div class="summary-detail__value"><%= pluralize(@booking.passengers.count, "passenger") %></div>
+        </div>
+      </div>
+
+      <!-- Passengers List -->
+      <div class="summary-passengers">
+        <h3 class="summary-passengers__title">Passengers</h3>
+        
+        <% @booking.passengers.each_with_index do |passenger, index| %>
+          <div class="summary-passenger">
+            <div>
+              <div class="summary-passenger__name">
+                <%= passenger.name %>
+                <% if index == 0 %>
+                  <span class="passenger-card__badge" style="margin-left: var(--space-sm);">Primary</span>
+                <% end %>
+              </div>
+              <div class="summary-passenger__email"><%= passenger.email %></div>
+            </div>
+            <div style="text-align: right;">
+              <div class="text-muted" style="font-size: var(--font-size-xs);">Ticket #</div>
+              <div style="font-family: monospace; font-weight: 600;"><%= passenger.ticket_number %></div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="summary-card__footer">
+      <div class="summary-total">
+        <div class="summary-total__label">Total Passengers</div>
+        <div class="summary-total__amount"><%= @booking.passengers.count %></div>
+      </div>
+      
+      <%= link_to "Book Another Flight", root_path, class: "btn btn-primary btn-lg" %>
+    </div>
+  </div>
+</div>
+
+<!-- Email Notice -->
+<div class="text-center mt-xl">
+  <p class="text-muted" style="font-size: var(--font-size-sm);">
+    📧 Confirmation emails have been sent to all passengers with their ticket information.
+  </p>
+  <% if Rails.env.development? %>
+    <p style="margin-top: var(--space-sm);">
+      <%= link_to "View emails in Letter Opener →", "/letter_opener", class: "text-primary", target: "_blank" %>
+    </p>
+  <% end %>
+</div>
