@@ -84,7 +84,7 @@
       </h2>
 
       <%= form_with url: new_booking_path, method: :get, local: true,
-                    data: { controller: "flight-select" } do %>
+                    data: { controller: "flight-select", turbo_frame: "_top" } do %>
         
         <div class="flight-list">
           <% @flights.each_with_index do |flight, index| %>
@@ -143,11 +143,68 @@
     <section class="flights-section">
       <div class="empty-state">
         <div class="empty-state__icon">✈️</div>
-        <h3 class="empty-state__title">No flights found</h3>
+        <h3 class="empty-state__title">No flights found for your search</h3>
         <p class="empty-state__description">
-          We couldn't find any flights matching your search. Try adjusting your dates or destinations.
+          Try different dates or destinations. Here are some upcoming flights you might like:
         </p>
       </div>
+
+      <h3 class="text-center mt-xl mb-lg">Available Flights</h3>
+      
+      <%= form_with url: new_booking_path, method: :get, local: true,
+                    data: { controller: "flight-select", turbo_frame: "_top" } do %>
+        
+        <div class="flight-list">
+          <% @available_flights.each_with_index do |flight, index| %>
+            <div class="flight-card" 
+                 data-flight-select-target="card"
+                 data-action="click->flight-select#select">
+              
+              <div class="flight-card__departure">
+                <span class="flight-card__code"><%= flight.departure_airport.airport_code %></span>
+                <span class="flight-card__city"><%= flight.departure_airport.airport_name.split(',').first %></span>
+                <span class="flight-card__time"><%= flight.startdatetime.strftime("%b %d, %H:%M") %></span>
+              </div>
+
+              <div class="flight-card__route">
+                <span class="flight-card__duration"><%= flight.flight_duration %> min</span>
+                <div class="flight-card__line">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 2L2 22M22 2L15 22L11 13L2 9L22 2Z"/>
+                  </svg>
+                </div>
+                <span class="flight-card__duration">Direct</span>
+              </div>
+
+              <div class="flight-card__arrival">
+                <span class="flight-card__code"><%= flight.arrival_airport.airport_code %></span>
+                <span class="flight-card__city"><%= flight.arrival_airport.airport_name.split(',').first %></span>
+                <span class="flight-card__time"><%= (flight.startdatetime + flight.flight_duration.minutes).strftime("%H:%M") %></span>
+              </div>
+
+              <div class="flight-card__price">
+                <span class="flight-card__amount">$<%= rand(150..800) %></span>
+                <span class="flight-card__per-person">per person</span>
+                <%= radio_button_tag :flight_id, flight.id, index == 0, 
+                    class: "flight-card__radio sr-only",
+                    data: { flight_select_target: "radio" } %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <%= hidden_field_tag :passengers, params[:passengers] || 1 %>
+        
+        <div class="flex flex-end mt-xl">
+          <button type="submit" class="btn btn-primary btn-lg" 
+                  data-flight-select-target="submit">
+            Continue to Passengers
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      <% end %>
     </section>
   <% end %>
 </turbo-frame>
