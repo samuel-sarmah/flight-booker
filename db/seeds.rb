@@ -1,40 +1,36 @@
 # This file should ensure the existence of records required to run the application in every environment (production,
 # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
 
-Airport.delete_all
+puts "Clearing existing data..."
+Passenger.delete_all
+Booking.delete_all
 Flight.delete_all
+Airport.delete_all
 
-# Airport seeds
+# Airport seeds - Major international airports
 airports = [
-  [ "Sarmah International, SK", "SIN" ],
-  [ "Atlanta GA", "ATL" ],
+  [ "Atlanta, GA", "ATL" ],
   [ "Beijing, CN", "PEK" ],
-  [ "London, GB", "LHR" ],
-  [ "Chicago, IL", "ORD" ],
-  [ "Tokyo JP", "HND" ],
-  [ "Los Angeles CA", "LAX" ],
-  [ "Paris, FR", "CDG" ],
-  [ "Dallas/FortWorth TX", "US" ],
-  [ "Frankfurt DE", "FRA" ],
-  [ "Hong Kong HK", "HKG" ],
-  [ "Denver Co", "DEN" ],
-  [ "Dubai AE", "DXB" ],
-  [ "Jarkata ID", "CGK" ],
+  [ "London Heathrow, GB", "LHR" ],
+  [ "Chicago O'Hare, IL", "ORD" ],
+  [ "Tokyo Haneda, JP", "HND" ],
+  [ "Los Angeles, CA", "LAX" ],
+  [ "Paris Charles de Gaulle, FR", "CDG" ],
+  [ "Dallas/Fort Worth, TX", "DFW" ],
+  [ "Frankfurt, DE", "FRA" ],
+  [ "Hong Kong", "HKG" ],
+  [ "Denver, CO", "DEN" ],
+  [ "Dubai, AE", "DXB" ],
+  [ "Jakarta, ID", "CGK" ],
   [ "Amsterdam, NL", "AMS" ],
   [ "Madrid, ES", "MAD" ],
   [ "Bangkok, TH", "BKK" ],
-  [ "New York, NY", "JFK" ],
-  [ "Singapore, SG", "SIN" ],
+  [ "New York JFK, NY", "JFK" ],
+  [ "Singapore", "SIN" ],
   [ "Guangzhou, CN", "CAN" ],
   [ "Las Vegas, NV", "LAS" ],
-  [ "Shanghai, CN", "PVG" ],
+  [ "Shanghai Pudong, CN", "PVG" ],
   [ "San Francisco, CA", "SFO" ],
   [ "Phoenix, AZ", "PHX" ],
   [ "Houston, TX", "IAH" ],
@@ -46,112 +42,81 @@ airports = [
   [ "Istanbul, TR", "IST" ],
   [ "Sydney, AU", "SYD" ],
   [ "Orlando, FL", "MCO" ],
-  [ "Incheon, KR", "INC" ],
+  [ "Seoul Incheon, KR", "ICN" ],
   [ "New Delhi, IN", "DEL" ],
   [ "Barcelona, ES", "BCN" ],
-  [ "London, GB", "LGW" ],
+  [ "London Gatwick, GB", "LGW" ],
   [ "Newark, NJ", "EWR" ],
-  [ "Toronto, ON", "YYZ" ],
-  [ "Shanghai, CN", "SHA" ],
+  [ "Toronto, CA", "YYZ" ],
   [ "Minneapolis, MN", "MSP" ],
   [ "Seattle, WA", "SEA" ],
   [ "Detroit, MI", "DTW" ],
   [ "Philadelphia, PA", "PHL" ],
   [ "Mumbai, IN", "BOM" ],
-  [ "Sao Paulo, BR", "GRU" ],
+  [ "São Paulo, BR", "GRU" ],
   [ "Manila, PH", "MNL" ],
-  [ "Chengdu, CN", "CTU" ],
   [ "Boston, MA", "BOS" ],
-  [ "Shenzhen, CN", "SZX" ],
   [ "Melbourne, AU", "MEL" ],
-  [ "Tokyo, JP", "NRT" ],
-  [ "Paris, FR", "ORY" ],
+  [ "Tokyo Narita, JP", "NRT" ],
   [ "Mexico City, MX", "MEX" ],
-  [ "Moscow, RU", "DME" ],
-  [ "Antalya, TR", "AYT" ],
   [ "Taipei, TW", "TPE" ],
   [ "Zurich, CH", "ZRH" ],
-  [ "New York, NY", "LGA" ],
+  [ "New York LaGuardia, NY", "LGA" ],
   [ "Fort Lauderdale, FL", "FLL" ],
-  [ "Washington, DC", "IAD" ],
-  [ "Palma De Mallorca, ES", "PMI" ],
+  [ "Washington Dulles, DC", "IAD" ],
   [ "Copenhagen, DK", "CPH" ],
-  [ "Moscow, RU", "SVO" ],
-  [ "Baltimore, MD", "BWI" ],
-  [ "Kunming, CN", "KMG" ],
   [ "Vienna, AT", "VIE" ],
   [ "Oslo, NO", "OSL" ],
-  [ "Jeddah, SA", "JED" ],
   [ "Brisbane, AU", "BNE" ],
   [ "Salt Lake City, UT", "SLC" ],
-  [ "Dussedldorf, DE", "DUS" ],
-  [ "Bogota, CO", "BOG" ],
   [ "Milan, IT", "MXP" ],
   [ "Johannesburg, ZA", "JNB" ],
   [ "Stockholm, SE", "ARN" ],
   [ "Manchester, GB", "MAN" ],
-  [ "Chicago, IL", "MDW" ],
-  [ "Washington, DC", "DCA" ],
+  [ "Chicago Midway, IL", "MDW" ],
   [ "Brussels, BE", "BRU" ],
   [ "Dublin, IE", "DUB" ],
-  [ "Seoul, KR", "GMP" ],
   [ "Doha, QA", "DOH" ],
-  [ "London, GB", "STN" ],
-  [ "Hangzhou, CN", "HGH" ],
-  [ "Jeju, KR", "CJU" ],
-  [ "Vancouver, BC", "YVR" ],
-  [ "Berlin, DE", "TXL" ],
-  [ "San Diego, CA", "SAN" ],
-  [ "Tampa, FL", "TPA" ],
-  [ "Sao Paulo, BR", "CGH" ],
-  [ "Brasilia, BR", "BSB" ],
-  [ "Sapporo, JP", "CTS" ],
-  [ "Xiamen, CN", "XMN" ],
-  [ "Riyadh, SA", "RUH" ],
-  [ "Fukuoka, JP", "FUK" ],
-  [ "Rio De Janeiro, BR", "GIG" ],
-  [ "Helsinki, FI", "HEL" ],
+  [ "Auckland, NZ", "AKL" ],
   [ "Lisbon, PT", "LIS" ],
-  [ "Athens, GR", "ATH" ],
-  [ "Entebbe International, UG", "EBB" ],
-  [ "Auckland, NZ", "AKL" ]
+  [ "Vancouver, CA", "YVR" ]
 ]
 
-airports.each do |name, code|
-  Airport.create!(airport_name: name, airport_code: code)
+puts "Creating airports..."
+airports.each do |airport_name, airport_code|
+  Airport.create!(airport_name: airport_name, airport_code: airport_code)
 end
-puts "#{Airport.count} aiports created"
+puts "✓ #{Airport.count} airports created"
 
+# Create flights for the next 90 days
 puts "Creating flights..."
-# Generate random flights
-airports = Airport.all
-total_flights = 1500
-flights_per_airport = (total_flights / airports.count.to_f).ceil
+flight_count = 0
+airport_ids = Airport.pluck(:id)
 
-airports.each do |departure_airport|
-  flights_per_airport.times do
-    # Select a random airport that's different from departure
-    arrival_airport = airports.where.not(id: departure_airport.id).sample
-
-    # Generate random datetime between tomorrow and next month
-    base_date = Date.today + rand(1..30)
-
-    # Use specific hours and minutes
-    hour = [ 7, 10, 14, 17, 20 ].sample
-    minute = [ 0, 15, 30, 45 ].sample
-
-    # Combine date with time
-    random_time = base_date.to_time.change(hour: hour, min: minute)
-
+# Generate flights for each day
+(Date.today..Date.today + 90.days).each do |date|
+  # Create 5-10 random flights per day
+  rand(5..10).times do
+    departure_id = airport_ids.sample
+    arrival_id = (airport_ids - [departure_id]).sample
+    
+    # Random departure time between 6 AM and 10 PM
+    hour = rand(6..22)
+    minute = [0, 15, 30, 45].sample
+    departure_time = date.to_datetime + hour.hours + minute.minutes
+    
+    # Random flight duration between 1-12 hours
+    duration = rand(60..720)
+    
     Flight.create!(
-      departure_airport_id: departure_airport.id,
-      arrival_airport_id: arrival_airport.id,
-      startdatetime: random_time,
-      flight_duration: rand(60...720)
+      departure_airport_id: departure_id,
+      arrival_airport_id: arrival_id,
+      startdatetime: departure_time,
+      flight_duration: duration
     )
-    print "." # progress indicator
+    flight_count += 1
   end
 end
 
-puts "#{Flight.count} flights created"
-puts "Average flights per airport: #{Flight.count.to_f / Airport.count}"
+puts "✓ #{flight_count} flights created"
+puts "\n✅ Seeding complete!"
