@@ -98,16 +98,16 @@ airport_ids = Airport.pluck(:id)
   # Create 5-10 random flights per day
   rand(5..10).times do
     departure_id = airport_ids.sample
-    arrival_id = (airport_ids - [departure_id]).sample
-    
+    arrival_id = (airport_ids - [ departure_id ]).sample
+
     # Random departure time between 6 AM and 10 PM
     hour = rand(6..22)
-    minute = [0, 15, 30, 45].sample
+    minute = [ 0, 15, 30, 45 ].sample
     departure_time = date.to_datetime + hour.hours + minute.minutes
-    
+
     # Random flight duration between 1-12 hours
     duration = rand(60..720)
-    
+
     Flight.create!(
       departure_airport_id: departure_id,
       arrival_airport_id: arrival_id,
