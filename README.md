@@ -6,6 +6,8 @@ A beautiful, Apple-inspired flight booking app built with Ruby on Rails and Hotw
 ![Rails](https://img.shields.io/badge/Rails-8.0-red)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
+![workflow screenshot](<public/localhost_3000_(iPad Mini).png>)
+
 ## 🎯 How It Works
 
 Booking a flight is super easy - just 3 steps:
