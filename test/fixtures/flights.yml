@@ -3,11 +3,11 @@
 one:
   departure_airport_id: 1
   arrival_airport_id: 1
-  start_datetime: 2025-09-02
-  flight_duration: 1
+  startdatetime: 2025-09-02 10:00:00
+  flight_duration: 120
 
 two:
   departure_airport_id: 1
   arrival_airport_id: 1
-  start_datetime: 2025-09-02
-  flight_duration: 1
+  startdatetime: 2025-09-02 14:00:00
+  flight_duration: 120
