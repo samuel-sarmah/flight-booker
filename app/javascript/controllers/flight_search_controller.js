@@ -6,6 +6,9 @@ export default class extends Controller {
 
   connect() {
     this.validate()
+    
+    // Auto-scroll to results after search
+    this.scrollToResults()
   }
 
   validate() {
@@ -43,6 +46,33 @@ export default class extends Controller {
     }, 300)
 
     this.validate()
+  }
+
+  scrollToResults() {
+    // Check if we have search parameters (indicating a search was performed)
+    const urlParams = new URLSearchParams(window.location.search)
+    const hasSearchParams = urlParams.has('departure_airport_id') || 
+                          urlParams.has('arrival_airport_id') || 
+                          urlParams.has('startdatetime')
+
+    if (hasSearchParams) {
+      // Wait for Turbo frame to load, then scroll to results
+      setTimeout(() => {
+        const resultsFrame = document.getElementById('flight-results')
+        if (resultsFrame) {
+          resultsFrame.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          })
+          
+          // Add a subtle highlight effect
+          resultsFrame.classList.add('results-highlighted')
+          setTimeout(() => {
+            resultsFrame.classList.remove('results-highlighted')
+          }, 2000)
+        }
+      }, 100)
+    }
   }
 
   showError(message) {
