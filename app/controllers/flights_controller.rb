@@ -23,7 +23,7 @@ class FlightsController < ApplicationController
       end
 
       @flights = @flights.order(:startdatetime).limit(20)
-      
+
       # If no flights match, show available alternatives
       if @flights.empty?
         @available_flights = Flight.includes(:departure_airport, :arrival_airport)

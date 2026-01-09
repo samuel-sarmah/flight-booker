@@ -1,6 +1,12 @@
 <% content_for :title, "OpenFlight - Book Your Flight" %>
 
+<!-- Trust & Security Section -->
+<%= render 'shared/trust_section' %>
+
 <!-- Quick Links Section -->
+<!-- Trust & Security Section -->
+<%= render 'shared/trust_section' %>
+
 <div class="card card--enhanced mb-xl" style="max-width: 700px; margin-left: auto; margin-right: auto;">
   <div class="card__header text-center">
     <h3 class="card__title">Welcome to OpenFlight</h3>
@@ -42,31 +48,6 @@
     <span class="progress-step__label">Confirm</span>
   </div>
 </nav>
-
-<!-- Quick Links Section -->
-<div class="card card--enhanced mb-xl" style="max-width: 700px; margin-left: auto; margin-right: auto;">
-  <div class="card__header text-center">
-    <h3 class="card__title">Welcome to OpenFlight</h3>
-    <p class="card__subtitle">Choose how you'd like to get started</p>
-  </div>
-  <div class="card__body">
-    <div class="action-grid">
-      <div class="action-card">
-        <div class="action-card__icon">🔍</div>
-        <h4 class="action-card__title">Search Flights</h4>
-        <p class="action-card__description">Find the perfect flight for your journey from our extensive network</p>
-        <%= link_to "Start Search", flights_path, class: "btn btn-primary btn-lg" %>
-      </div>
-      
-      <div class="action-card">
-        <div class="action-card__icon">📋</div>
-        <h4 class="action-card__title">Existing Booking</h4>
-        <p class="action-card__description">Access your booking details using your reference and email</p>
-        <%= link_to "Find Booking", lookup_bookings_path, class: "btn btn-secondary btn-lg" %>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Features Section -->
 <section class="features-section">

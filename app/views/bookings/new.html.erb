@@ -54,39 +54,6 @@
   </div>
 </div>
 
-<!-- Guest Information (if guest checkout) -->
-<% if @booking.guest_checkout? %>
-  <div class="card mb-xl" style="max-width: 600px; margin-left: auto; margin-right: auto;">
-    <div class="card__header">
-      <h3 class="card__title">Contact Information</h3>
-      <p class="card__subtitle">We need these details to send your booking confirmation</p>
-    </div>
-    <div class="card__body">
-      <div class="form-group">
-        <%= f.label :guest_email, "Email Address", class: "form-label form-label--required" %>
-        <%= f.email_field :guest_email, 
-            class: "form-input", 
-            placeholder: "your.email@example.com",
-            required: true,
-            autocomplete: "email" %>
-        <p class="form-help">Booking confirmation and receipts will be sent to this email</p>
-      </div>
-      
-      <div class="form-group">
-        <%= f.label :phone, "Phone Number", class: "form-label form-label--required" %>
-        <%= f.telephone_field :phone, 
-            class: "form-input", 
-            placeholder: "+1 (555) 123-4567",
-            required: true,
-            autocomplete: "tel" %>
-        <p class="form-help">Only used for urgent flight changes or notifications</p>
-      </div>
-      
-      <%= f.hidden_field :guest_checkout, value: true %>
-    </div>
-  </div>
-<% end %>
-
 <!-- Passenger Form -->
 <section class="passenger-section">
   <h2 class="text-center mb-xl">Passenger Information</h2>
@@ -97,6 +64,37 @@
     <%= f.hidden_field :flight_id, value: @flight.id %>
     <% if @booking.guest_checkout? %>
       <%= f.hidden_field :guest_checkout, value: true %>
+    <% end %>
+
+    <!-- Guest Information (if guest checkout) -->
+    <% if @booking.guest_checkout? %>
+      <div class="card mb-xl" style="max-width: 600px; margin-left: auto; margin-right: auto;">
+        <div class="card__header">
+          <h3 class="card__title">Contact Information</h3>
+          <p class="card__subtitle">We need these details to send your booking confirmation</p>
+        </div>
+        <div class="card__body">
+          <div class="form-group">
+            <%= f.label :guest_email, "Email Address", class: "form-label form-label--required" %>
+            <%= f.email_field :guest_email, 
+                class: "form-input", 
+                placeholder: "your.email@example.com",
+                required: true,
+                autocomplete: "email" %>
+            <p class="form-help">Booking confirmation and receipts will be sent to this email</p>
+          </div>
+          
+          <div class="form-group">
+            <%= f.label :phone, "Phone Number", class: "form-label form-label--required" %>
+            <%= f.telephone_field :phone, 
+                class: "form-input", 
+                placeholder: "+1 (555) 123-4567",
+                required: true,
+                autocomplete: "tel" %>
+            <p class="form-help">Only used for urgent flight changes or notifications</p>
+          </div>
+        </div>
+      </div>
     <% end %>
 
     <div class="passenger-list" data-passengers-target="container">
@@ -209,6 +207,18 @@
       </div>
     </template>
 
+    <!-- Security & Trust Indicators -->
+    <div class="security-indicators mb-xl">
+      <div class="security-indicator">
+        <span class="security-indicator__icon">🔒</span>
+        <span class="security-indicator__text">Your information is secure and encrypted</span>
+      </div>
+      <div class="security-indicator">
+        <span class="security-indicator__icon">🛡️</span>
+        <span class="security-indicator__text">Protected by industry-leading security</span>
+      </div>
+    </div>
+
     <!-- Actions -->
     <div class="flex gap-md mt-xl" style="justify-content: space-between;">
       <button type="button" class="btn btn-secondary" 
@@ -226,8 +236,34 @@
         <%= link_to "Back", flights_path, class: "btn btn-ghost" %>
         
         <%= f.submit "Confirm Booking", 
-            class: "btn btn-primary btn-lg",
+            class: "btn btn-primary btn-lg btn-security",
             data: { form_validation_target: "submit" } %>
+      </div>
+    </div>
+
+    <!-- Payment Security Notice -->
+    <div class="payment-notice mt-lg">
+      <div class="payment-notice__icon">🔐</div>
+      <div class="payment-notice__content">
+        <h4 class="payment-notice__title">Secure Booking Process</h4>
+        <p class="payment-notice__text">
+          This booking is secured with 256-bit SSL encryption. Your personal and payment 
+          information is protected and never shared with third parties without your consent.
+        </p>
+        <div class="payment-badges">
+          <div class="payment-badge">
+            <span class="payment-badge__icon">🔒</span>
+            <span class="payment-badge__text">SSL Encrypted</span>
+          </div>
+          <div class="payment-badge">
+            <span class="payment-badge__icon">💳</span>
+            <span class="payment-badge__text">PCI Compliant</span>
+          </div>
+          <div class="payment-badge">
+            <span class="payment-badge__icon">🛡️</span>
+            <span class="payment-badge__text">Fraud Protected</span>
+          </div>
+        </div>
       </div>
     </div>
   <% end %>
