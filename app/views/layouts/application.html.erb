@@ -1,55 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title><%= content_for(:title) || "Flight Booker" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#f5f5f7">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+   <head>
+     <title><%= content_for(:title) || "OpenFlight - Professional Flight Booking" %></title>
+     <meta name="viewport" content="width=device-width,initial-scale=1">
+     <meta name="apple-mobile-web-app-capable" content="yes">
+     <meta name="mobile-web-app-capable" content="yes">
+     <meta name="theme-color" content="#0066cc">
+     <meta name="description" content="OpenFlight - Professional flight booking with secure checkout, competitive prices, and 24/7 support">
+     <%= csrf_meta_tags %>
+     <%= csp_meta_tag %>
+ 
+     <%= yield :head %>
+ 
+     <link rel="icon" href="/icon.png" type="image/png">
+     <link rel="icon" href="/icon.svg" type="image/svg+xml">
+     <link rel="apple-touch-icon" href="/icon.png">
+ 
+     <%# Preload fonts %>
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     
+     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+     <%= javascript_importmap_tags %>
+     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+   </head>
+ 
+   <body>
+     <%# OpenFlight Professional Header %>
+     <header class="header header--openflight">
+       <div class="container">
+         <div class="header__content">
+           <!-- Logo -->
+           <div class="header__logo">
+             <%= link_to root_path, class: "logo logo--header" do %>
+               <div class="logo__icon">✈️</div>
+               <span class="logo__text">OpenFlight</span>
+             <% end %>
+           </div>
 
-    <%= yield :head %>
+           <!-- Navigation -->
+           <nav class="header__nav">
+             <ul class="nav-list">
+               <li class="nav-item">
+                 <%= link_to "Search Flights", flights_path, class: "nav-link #{'nav-link--active' if request.path == flights_path}" %>
+               </li>
+               <li class="nav-item">
+                 <%= link_to "Find Booking", lookup_bookings_path, class: "nav-link #{'nav-link--active' if request.path == lookup_bookings_path}" %>
+               </li>
+               <li class="nav-item">
+                 <%= link_to "Support", "#", class: "nav-link" %>
+               </li>
+             </ul>
+           </nav>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+           <!-- Contact Info -->
+           <div class="header__contact">
+             <div class="contact-item">
+               <span class="contact-item__icon">📞</span>
+               <span class="contact-item__text">1-800-OPENAIR</span>
+             </div>
+             <div class="contact-item">
+               <span class="contact-item__icon">📧</span>
+               <span class="contact-item__text">support@openflight.com</span>
+             </div>
+           </div>
+         </div>
+       </div>
+     </header>
 
-    <%# Preload fonts %>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
-  </head>
+     <main class="page page--with-header">
+       <!-- Flash Messages -->
+       <% if flash[:notice] %>
+         <div class="alert alert-success alert--openflight" role="alert">
+           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+             <polyline points="22 4 12 14.01 9 11.01"/>
+           </svg>
+           <%= flash[:notice] %>
+         </div>
+       <% end %>
+       
+       <% if flash[:alert] %>
+         <div class="alert alert-error alert--openflight" role="alert">
+           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+             <circle cx="12" cy="12" r="10"/>
+             <line x1="12" y1="8" x2="12" y2="12"/>
+             <line x1="12" y1="16" x2="12.01" y2="16"/>
+           </svg>
+           <%= flash[:alert] %>
+         </div>
+       <% end %>
+       
+       <%= yield %>
+     </main>
 
-  <body>
-    <main class="page">
-      <div class="container">
-        <% if flash[:notice] %>
-          <div class="alert alert-success" role="alert">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-              <polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
-            <%= flash[:notice] %>
-          </div>
-        <% end %>
-        
-        <% if flash[:alert] %>
-          <div class="alert alert-error" role="alert">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
-            <%= flash[:alert] %>
-          </div>
-        <% end %>
-        
-        <%= yield %>
-      </div>
-    </main>
-  </body>
-</html>
+     <!-- OpenFlight Footer -->
+     <footer class="footer footer--openflight">
+       <div class="container">
+         <div class="footer__content">
+           <div class="footer__section">
+             <h4 class="footer__title">OpenFlight</h4>
+             <p class="footer__description">
+               Professional flight booking with transparency and reliability. 
+               Your journey begins with confidence.
+             </p>
+             <div class="trust-seals">
+               <div class="trust-seal">
+                 <span class="trust-seal__icon">🔒</span>
+                 <span class="trust-seal__text">SSL Secure</span>
+               </div>
+               <div class="trust-seal">
+                 <span class="trust-seal__icon">✓</span>
+                 <span class="trust-seal__text">IATA Certified</span>
+               </div>
+             </div>
+           </div>
+
+           <div class="footer__section">
+             <h4 class="footer__title">Quick Links</h4>
+             <ul class="footer__links">
+               <li><%= link_to "Search Flights", flights_path, class: "footer__link" %></li>
+               <li><%= link_to "Find Booking", lookup_bookings_path, class: "footer__link" %></li>
+               <li><%= link_to "About Us", "#", class: "footer__link" %></li>
+               <li><%= link_to "Contact", "#", class: "footer__link" %></li>
+             </ul>
+           </div>
+
+           <div class="footer__section">
+             <h4 class="footer__title">Support</h4>
+             <ul class="footer__links">
+               <li><%= link_to "Help Center", "#", class: "footer__link" %></li>
+               <li><%= link_to "Privacy Policy", "#", class: "footer__link" %></li>
+               <li><%= link_to "Terms of Service", "#", class: "footer__link" %></li>
+               <li><%= link_to "Refund Policy", "#", class: "footer__link" %></li>
+             </ul>
+           </div>
+
+           <div class="footer__section">
+             <h4 class="footer__title">Contact Us</h4>
+             <div class="contact-info">
+               <div class="contact-info__item">
+                 <strong>Phone:</strong> 1-800-OPENAIR
+               </div>
+               <div class="contact-info__item">
+                 <strong>Email:</strong> support@openflight.com
+               </div>
+               <div class="contact-info__item">
+                 <strong>Hours:</strong> 24/7 Customer Support
+               </div>
+             </div>
+           </div>
+         </div>
+
+         <div class="footer__bottom">
+           <p>&copy; 2026 OpenFlight. All rights reserved. Professional flight booking platform.</p>
+         </div>
+       </div>
+     </footer>
+   </body>
+ </html>
