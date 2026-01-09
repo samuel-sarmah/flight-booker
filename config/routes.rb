@@ -8,6 +8,10 @@ Rails.application.routes.draw do
     resources :passengers, only: [ :show ]
   end
 
+  # Guest booking lookup
+  get "/lookup", to: "bookings_lookup#new", as: :lookup_bookings
+  get "/lookup/find", to: "bookings_lookup#show", as: :find_booking
+
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end

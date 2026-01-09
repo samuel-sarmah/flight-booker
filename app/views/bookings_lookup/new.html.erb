@@ -1,0 +1,98 @@
+<% content_for :title, "Find Your Booking" %>
+
+<div class="card" style="max-width: 500px; margin: 2rem auto;">
+  <div class="card__header text-center">
+    <h2 class="card__title">Find Your Booking</h2>
+    <p class="card__subtitle">Enter your booking reference and email to access your booking details</p>
+  </div>
+  
+  <div class="card__body">
+    <%= form_with url: lookup_bookings_path, method: :get, 
+                local: true, 
+                data: { controller: "form-validation" } do |f| %>
+      
+      <div class="form-group">
+        <%= f.label :reference, "Booking Reference", class: "form-label form-label--required" %>
+        <%= f.text_field :reference, 
+            class: "form-input", 
+            placeholder: "ABC123",
+            required: true,
+            maxlength: 6,
+            style: "text-transform: uppercase; font-family: monospace;",
+            data: { 
+              form_validation_target: "field",
+              validation_type: "booking_reference",
+              validation_required: true,
+              action: "blur->form-validation#validateField input->form-validation#validateField"
+            } %>
+        <p class="form-help">6-character booking reference (found in your confirmation email)</p>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :email, "Email Address", class: "form-label form-label--required" %>
+        <%= f.email_field :email, 
+            class: "form-input", 
+            placeholder: "your.email@example.com",
+            required: true,
+            autocomplete: "email",
+            data: { 
+              form_validation_target: "field",
+              validation_type: "email",
+              validation_required: true,
+              action: "blur->form-validation#validateField input->form-validation#validateField"
+            } %>
+        <p class="form-help">Email address used when booking</p>
+      </div>
+      
+      <div class="flex gap-md" style="margin-top: var(--space-lg);">
+        <%= link_to "Back to Home", root_path, class: "btn btn-ghost" %>
+        <%= f.submit "Find Booking", 
+            class: "btn btn-primary btn-lg" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Help Section -->
+<div class="card" style="max-width: 500px; margin: 2rem auto;">
+  <div class="card__header">
+    <h3 class="card__title">Need Help?</h3>
+  </div>
+  <div class="card__body">
+    <div class="help-item">
+      <h4 class="help-item__title">📧 Check Your Email</h4>
+      <p class="help-item__description">Your booking reference was sent in the confirmation email when you made your booking.</p>
+    </div>
+    
+    <div class="help-item">
+      <h4 class="help-item__title">🔍 Reference Format</h4>
+      <p class="help-item__description">Booking references are 6 characters long (letters and numbers only).</p>
+    </div>
+    
+    <div class="help-item">
+      <h4 class="help-item__title">📞 Contact Support</h4>
+      <p class="help-item__description">If you still can't find your booking, contact our support team for assistance.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+.help-item {
+  margin-bottom: var(--space-md);
+}
+
+.help-item__title {
+  margin-bottom: var(--space-xs);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.help-item__description {
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.form-input[style*="text-transform: uppercase"] {
+  letter-spacing: 0.05em;
+}
+</style>

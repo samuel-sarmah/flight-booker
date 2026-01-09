@@ -4,9 +4,23 @@
 <header class="hero">
   <h1 class="hero__title">Book Your Flight</h1>
   <p class="hero__subtitle">
-    Find and book the perfect flight for your journey. Simple, fast, and elegant.
+    Find and book your perfect flight for your journey. Simple, fast, and elegant.
   </p>
 </header>
+
+<!-- Quick Links Section -->
+<div class="card mb-xl" style="max-width: 600px; margin-left: auto; margin-right: auto;">
+  <div class="card__header">
+    <h3 class="card__title">Already have a booking?</h3>
+    <p class="card__subtitle">Find your existing booking with reference and email</p>
+  </div>
+  <div class="card__body">
+    <div class="flex gap-md">
+      <%= link_to "Find Booking", lookup_bookings_path, class: "btn btn-secondary" %>
+      <%= link_to "Continue as Guest", flights_path, class: "btn btn-ghost" %>
+    </div>
+  </div>
+</div>
 
 <!-- Progress Steps -->
 <nav class="progress-steps" aria-label="Booking progress">
