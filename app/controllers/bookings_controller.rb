@@ -3,6 +3,12 @@ class BookingsController < ApplicationController
     @flight = Flight.find(params[:flight_id])
     @passenger_count = params[:passengers].to_i
     @booking = Booking.new(flight: @flight)
+
+    # Check if this is a guest checkout
+    if params[:guest] == "true"
+      @booking.guest_checkout = true
+    end
+
     @passenger_count.times { @booking.passengers.build }
   end
 
@@ -31,6 +37,7 @@ class BookingsController < ApplicationController
   private
 
   def booking_params
-    params.require(:booking).permit(:flight_id, passengers_attributes: [ :name, :email ])
+    permitted = [ :flight_id, :guest_checkout, :guest_email, :phone, passengers_attributes: [ :name, :email ] ]
+    params.require(:booking).permit(permitted)
   end
 end
